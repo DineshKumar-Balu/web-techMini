@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Movie by ID</title>
+</head>
+<body>
+    Enter Movie ID: <input type="text" name="movieId" id="movieId"> <br>
+    <input type="button" value="Get Movie" id="getone"> <br>
+    <p id="result"></p>
+
+    <script>
+        const getOneButton = document.getElementById('getone');
+        const movieIdInput = document.getElementById('movieId');
+        const result = document.getElementById('result');
+
+        getOneButton.addEventListener('click', () => {
+            const movieId = movieIdInput.value;
+
+            if (movieId === "") {
+                result.innerText = "Please enter a movie ID!";
+            } else {
+                fetch(`http://localhost:9000/api/movies/${movieId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Request failed');
+                        }
+                        return response.json();
+                    })
+                    .then(response => {
+                        result.innerText = JSON.stringify(response);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        result.innerText = "An error occurred while fetching the movie";
+                    });
+            }
+        });
+    </script>
+</body>
+</html>

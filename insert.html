@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Ticket Booking</title>
+</head>
+<body>
+    <form>
+        Movie ID: <input type="text" name="movieId" id="movieId"> <br>
+        Theater ID: <input type="text" name="theaterId" id="theaterId"> <br>
+        User ID: <input type="text" name="userId" id="userId"> <br>
+        Booking Date: <input type="datetime-local" name="bookingDate" id="bookingDate"> <br>
+        Seats: <input type="text" name="seats" id="seats"> <br>
+        Total Amount: <input type="number" name="totalAmount" id="totalAmount"> <br>
+        <input type="button" name="book" value="Book Now" id="book"> <br>
+    </form>
+    <p id="result"></p>
+    
+</body>
+
+<script>
+    const movieId = document.getElementById('movieId');
+    const theaterId = document.getElementById('theaterId');
+    const userId = document.getElementById('userId');
+    const bookingDate = document.getElementById('bookingDate');
+    const seats = document.getElementById('seats');
+    const totalAmount = document.getElementById('totalAmount');
+    const bookButton = document.getElementById('book');
+    const result = document.getElementById('result');
+
+    bookButton.addEventListener('click', () => {
+        const data = {
+            movieId: movieId.value,
+            theaterId: theaterId.value,
+            userId: userId.value,
+            bookingDate: new Date(bookingDate.value).toISOString(),
+            seats: seats.value.split(','),
+            totalAmount: parseFloat(totalAmount.value),
+        };
+
+        fetch('http://localhost:9000/api/movies', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(response => {
+            result.innerText = JSON.stringify(response);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
+</html>

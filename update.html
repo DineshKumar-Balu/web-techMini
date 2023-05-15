@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Booking</title>
+</head>
+<body>
+    <form>
+        Booking ID: <input type="text" name="bookingId" id="bookingId"> <br>
+        New Total Amount: <input type="number" name="totalAmount" id="totalAmount"> <br>
+        <input type="button" value="Update Booking" id="update"> <br>
+        <p id="result"></p>
+    </form>
+    
+    <script>
+        const updateButton = document.getElementById('update');
+        const bookingIdInput = document.getElementById('bookingId');
+        const totalAmountInput = document.getElementById('totalAmount');
+        const result = document.getElementById('result');
+
+        updateButton.addEventListener('click', () => {
+            const bookingId = bookingIdInput.value;
+            const totalAmount = totalAmountInput.value;
+
+            if (bookingId === "" || totalAmount === "") {
+                result.innerText = "Please enter a booking ID and total amount!";
+            } else {
+                const data = {
+                    totalAmount: parseFloat(totalAmount)
+                };
+
+                fetch(`http://localhost:9000/api/bookings/${bookingId}`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.text())
+                .then(response => {
+                    result.innerText = response;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
